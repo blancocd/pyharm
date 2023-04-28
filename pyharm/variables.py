@@ -87,12 +87,17 @@ fns_dict = {# 4-vectors
             'Pb': lambda dump: dump['bsq'] / 2,
             'Ptot': lambda dump: dump['Pg'] + dump['Pb'],
             'beta': lambda dump: dump['Pg'] / dump['Pb'],
+            'Pp': lambda dump: (dump['gam_p'] - 1.) * dump['UU'],
+            'beta_p': lambda dump: dump['Pp'] / dump['Pb'],
+            'beta_max': lambda dump: dump['Pg'] / dump['Pb'],
+            'sigma_w': lambda dump: dump['bsq'] / (dump['RHO'] + dump['UU'] + dump['Pg']),
             'jcov': lambda dump: dump.grid.lower_grid(dump['jcon']),
             'jsq': lambda dump: dump.grid.dot(dump['jcon'], dump['jcov']),
             'Jsq': lambda dump: dump.grid.dot(dump['jcon'], dump['jcov']) + dump.grid.dot(dump['jcon'], dump['ucov'])**2,
             'b': lambda dump: np.sqrt(dump['bsq']),
             'Gamma': lambda dump: lorentz_calc(dump),
             'betagamma': lambda dump: np.sqrt((dump['FE'] / dump['FM'])**2 - 1),
+            'T': lambda dump: dump['KTOT'] * pow(dump['RHO'], dump['gam']-1),
             'Theta': lambda dump: (dump['gam'] - 1) * dump['UU'] / dump['RHO'],
             'Thetap': lambda dump: (dump['gam_p'] - 1) * dump['UU'] / dump['RHO'],
             'Thetae': lambda dump: (dump['gam_e'] - 1) * dump['UU'] / dump['RHO'],
@@ -113,6 +118,14 @@ fns_dict = {# 4-vectors
             'cs': lambda dump: np.sqrt(dump['gam'] * dump['Pg'] / (dump['RHO'] + dump['gam'] * dump['UU'])),
             }
 
+electron_heating_models = { 
+    "Howes": "KEL_HOWES", "Kawazura_18":"KEL_KAWAZURA18", "Kawazura_22":"KEL_KAWAZURA22", 
+    "Werner": "KEL_WERNER", "Rowan": "KEL_ROWAN", "Sharma":"KEL_SHARMA"
+                            }
+Temps_dict = {"Te_{}".format(k): lambda dump: dump[v] * pow(dump['RHO'], dump['gam_e']-1) for k, v in electron_heating_models.items()}
+Thets_dict = {"Thetae_{}".format(k): lambda dump: 1836.15267 * dump[v] * pow(dump['RHO'], dump['gam_e']-1) for k, v in electron_heating_models.items()}
+
+fns_dict = fns_dict | Temps_dict | Thets_dict
 ## Physics functions ##
 
 def lorentz_calc(dump, loc=Loci.CENT):

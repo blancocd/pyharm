@@ -62,7 +62,9 @@ class KHARMAFile(DumpFile):
                        "U2": "u2",
                        "U3": "u3",
                        "KTOT": "Ktot",
-                       "KEL_KAWAZURA": "Kel_Kawazura",
+                       "KEL_HOWES":    "Kel_Howes",
+                       "KEL_KAWAZURA18": "Kel_Kawazura18",
+                       "KEL_KAWAZURA22": "Kel_Kawazura22",
                        "KEL_WERNER":   "Kel_Werner",
                        "KEL_ROWAN":    "Kel_Rowan",
                        "KEL_SHARMA":   "Kel_Sharma",
@@ -72,7 +74,7 @@ class KHARMAFile(DumpFile):
     # the order they would appear
     # If iharm3d ever supports viscous AND e- together we're out of spec here & in general
     var_names_ordered = ['rho', 'u', 'u1', 'u2', 'u3', 'B1', 'B2', 'B3', 'q', 'dP',
-                         'Ktot', 'Kel_Constant', 'Kel_Werner', 'Kel_Rowan', 'Kel_Sharma']
+                         'Ktot', 'Kel_Constant', 'Kel_Howes', 'Kel_Kawazura18', 'Kel_Kawazura22', 'Kel_Werner', 'Kel_Rowan', 'Kel_Sharma']
 
 
     @classmethod
@@ -93,7 +95,7 @@ class KHARMAFile(DumpFile):
 
         # Pick out indices and return their vectors
         ind = None
-        if var[-1:] in ("1", "2", "3"):
+        if (var[-1:] in ("1", "2", "3") and "Kawazura" not in var):
             # Mark which index we want
             ind = int(var[-1:]) - 1
             # Then read the corresponding vector, cons/prims.u/B
