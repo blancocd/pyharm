@@ -123,7 +123,7 @@ electron_heating_models = {
     "Werner": "KEL_WERNER", "Rowan": "KEL_ROWAN", "Sharma":"KEL_SHARMA"
                             }
 Temps_dict = {"Te_{}".format(k): lambda dump: dump[v] * pow(dump['RHO'], dump['gam_e']-1) for k, v in electron_heating_models.items()}
-Thets_dict = {"Thetae_{}".format(k): lambda dump: 1836.15267 * dump[v] * pow(dump['RHO'], dump['gam_e']-1) for k, v in electron_heating_models.items()}
+Thets_dict = {"Thetae_{}".format(k): lambda dump: 1836.15267 * dump["Te_{}".format(k)] for k, v in electron_heating_models.items()}
 
 fns_dict = fns_dict | Temps_dict | Thets_dict
 ## Physics functions ##
