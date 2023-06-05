@@ -116,16 +116,32 @@ fns_dict = {# 4-vectors
             'jI': lambda dump: jnu(dump),
             'K': lambda dump: (dump['gam']-1.) * dump['UU'] * pow(dump['RHO'], -dump['gam']),
             'cs': lambda dump: np.sqrt(dump['gam'] * dump['Pg'] / (dump['RHO'] + dump['gam'] * dump['UU'])),
+
+            "Howes": (lambda dump: dump["KEL_HOWES"]),
+            "Te_Howes": (lambda dump: dump["KEL_HOWES"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Howes": (lambda dump: 1836.15267 * dump["Te_Howes"]),
+
+            "Kawazura_18": (lambda dump: dump["KEL_KAWAZURA18"]),
+            "Te_Kawazura_18": (lambda dump: dump["KEL_KAWAZURA18"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Kawazura_18": (lambda dump: 1836.15267 * dump["Te_Kawazura_18"]),
+
+            "Kawazura_22": (lambda dump: dump["KEL_KAWAZURA22"]),
+            "Te_Kawazura_22": (lambda dump: dump["KEL_KAWAZURA22"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Kawazura_22": (lambda dump: 1836.15267 * dump["Te_Kawazura_22"]),
+
+            "Werner": (lambda dump: dump["KEL_WERNER"]),
+            "Te_Werner": (lambda dump: dump["KEL_WERNER"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Werner": (lambda dump: 1836.15267 * dump["Te_Werner"]),
+
+            "Rowan": (lambda dump: dump["KEL_ROWAN"]),
+            "Te_Rowan": (lambda dump: dump["KEL_ROWAN"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Rowan": (lambda dump: 1836.15267 * dump["Te_Rowan"]),
+            
+            "Sharma": (lambda dump: dump["KEL_SHARMA"]),
+            "Te_Sharma": (lambda dump: dump["KEL_SHARMA"] * pow(dump['RHO'], dump['gam_e']-1)),
+            "Thetae_Sharma": (lambda dump: 1836.15267 * dump["Te_Sharma"]),
             }
 
-electron_heating_models = { 
-    "Howes": "KEL_HOWES", "Kawazura_18":"KEL_KAWAZURA18", "Kawazura_22":"KEL_KAWAZURA22", 
-    "Werner": "KEL_WERNER", "Rowan": "KEL_ROWAN", "Sharma":"KEL_SHARMA"
-                            }
-Temps_dict = {"Te_{}".format(k): lambda dump: dump[v] * pow(dump['RHO'], dump['gam_e']-1) for k, v in electron_heating_models.items()}
-Thets_dict = {"Thetae_{}".format(k): lambda dump: 1836.15267 * dump["Te_{}".format(k)] for k, v in electron_heating_models.items()}
-
-fns_dict = fns_dict | Temps_dict | Thets_dict
 ## Physics functions ##
 
 def lorentz_calc(dump, loc=Loci.CENT):
